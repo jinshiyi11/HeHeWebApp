@@ -24,6 +24,13 @@ Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
+  data() {
+    console.log('in data')
+    return { x: 1 }
+  },
+  created() {
+    console.log('in cretaed')
+  },
   router,
   render: h => h(App)
 }).$mount('#app-box')
