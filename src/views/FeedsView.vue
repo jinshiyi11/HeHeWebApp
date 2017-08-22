@@ -8,7 +8,7 @@
       <router-link :to="{name:'AlbumView',params:{feedId:item.id}}">
         <p class="title">{{item.title}}</p>
         <div class="pic-container">
-        <x-img class="pic" :src="getBigImgUrl(item.content)" container="#list"></x-img>
+        <x-img class="pic" :src="getBigImgUrl(item.content)" :default-src="require('../assets/imgs/loading.gif')" container="#list"></x-img>
         </div>
         
         <!--底部分享和收藏按鈕-->

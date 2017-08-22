@@ -7,6 +7,7 @@ import AlbumView from '@/views/AlbumView'
 Vue.use(Router)
 
 const scrollBehavior = (to, from, savedPosition) => {
+  console.log('scrollBehavior:' + savedPosition)
   if (savedPosition) {
     return savedPosition
   } else {

@@ -1,13 +1,15 @@
 <template>
   <div class="albums">
-    <div v-if="loading">正在加载</div>
+    <div v-if="loading">
+      <img :src="require('../assets/imgs/loading.gif')"></img>
+    </div>
     <div v-else-if="!loadSuccess">网络异常</div>
     <div v-else>
       <swiper class="swiper" :show-dots="false" height="100vh" v-model="currentIndex" @on-index-change="onIndexChanged">
         <img class="back" src="../assets/ic_menu_back.png" @click="$router.go(-1)"></img>
         <div class="title">{{currentIndex+1}}/{{imageList.length}}</div>
         <swiper-item v-for="(item, index) in imageList" :key="index" ref="swiperItems">
-          <x-img class="album-img" :src="getProxyUrl(item.bigUrl)" container=".swiper"></x-img>
+          <x-img class="album-img" :src="getProxyUrl(item.bigUrl)" :default-src="require('../assets/imgs/loading.gif')" container=".swiper"></x-img>
         </swiper-item>
         <div class="desc">{{imageList[currentIndex].description}}</div>
       </swiper>
@@ -18,6 +20,7 @@
 <script>
 import axios from 'axios'
 import * as Util from '@/util/util'
+import * as Log from '@/util/log'
 import { Swiper, SwiperItem, XImg } from 'vux'
 
 export default {
@@ -34,18 +37,26 @@ export default {
       imageList: []
     }
   },
-  created() {
+  activated() {
+    Log.log('activated')
     axios.get(this.getAlbumPicsUrl(this.$route.params.feedId))
       .then(response => {
-        console.log(response)
+        Log.log(response)
         this.loading = false
         this.loadSuccess = true
         this.imageList.push(...response.data)
       }).catch(err => {
-        console.log(err)
+        Log.log(err)
         this.loading = false
         this.loadSuccess = false
       })
+  },
+  deactivated() {
+    Log.log('deactivated')
+    this.loading = true
+    this.loadSuccess = false
+    this.currentIndex = 0
+    this.imageList = []
   },
   methods: {
     getAlbumPicsUrl(feedId) {
@@ -55,9 +66,9 @@ export default {
       return Util.getProxyUrl(rawUrl)
     },
     onIndexChanged(index) {
-      console.log(`onIndexChanged:${index}`)
+      Log.log(`onIndexChanged:${index}`)
       // currentIndex = index
-      // console.log(this.$refs.swiperItems[index])
+      // Log.log(this.$refs.swiperItems[index])
       // 由于滑动翻页时translate不会触发图片加载，所以暂时强制加载
       this.$refs.swiperItems[index].$children[0].blazy.load(this.$refs.swiperItems[index].$children[0].$el, true)
     }
