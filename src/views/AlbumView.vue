@@ -9,7 +9,7 @@
         <img class="back" src="../assets/ic_menu_back.png" @click="$router.go(-1)"></img>
         <div class="title">{{currentIndex+1}}/{{imageList.length}}</div>
         <swiper-item v-for="(item, index) in imageList" :key="index" ref="swiperItems">
-          <x-img class="album-img" :src="getProxyUrl(item.bigUrl)" :default-src="require('../assets/imgs/loading.gif')" container=".swiper"></x-img>
+          <x-img class="album-img" :src="getProxyUrl(item.bigUrl)" default-src="/static/img/default.png" container=".swiper"></x-img>
         </swiper-item>
         <div class="desc">{{imageList[currentIndex].description}}</div>
       </swiper>

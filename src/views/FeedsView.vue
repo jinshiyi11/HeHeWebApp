@@ -5,12 +5,31 @@
   <vue-pull-refresh :on-refresh="onPullDown">
   <div class="list" id="list">
     <div class="item" v-for="item in feedList">
-      <router-link :to="{name:'AlbumView',params:{feedId:item.id}}">
+       <!--相册-->
+      <router-link v-if="item.type==1" :to="{name:'AlbumView',params:{feedId:item.id}}">
         <p class="title">{{item.title}}</p>
         <div class="pic-container">
-        <x-img class="pic" :src="getBigImgUrl(item.content)" :default-src="require('../assets/imgs/loading.gif')" container="#list"></x-img>
+        <x-img class="pic" :src="getBigImgUrl(item.content)" default-src="/static/img/default.png" container="#list"></x-img>
         </div>
-        
+        <!--底部分享和收藏按鈕-->
+        <div class="footer">
+          <div class="footer-item">
+            <img class="share" src="../assets/ic_redirect_normal.png"></img>
+          </div>
+          <i class="divider"></i>
+          <div class="footer-item">
+            <img class="star" src="../assets/ic_star_0.png"></img>
+          </div>
+        </div>
+      </router-link>
+
+      <!--视频-->
+      <router-link v-else-if="item.type==2" :to="{name:'VideoView',params:{videoId:getVideoId(item)}}">
+        <p class="title">{{item.title}}</p>
+        <div class="pic-container">
+        <img class="video" :src="require('../assets/imgs/ic_btn_video.png')"></img>
+        <x-img class="pic" :src="getVideoImgUrl(item.content)" default-src="/static/img/default.png" container="#list"></x-img>
+        </div>
         <!--底部分享和收藏按鈕-->
         <div class="footer">
           <div class="footer-item">
@@ -39,6 +58,7 @@ import VuePullRefresh from 'vue-pull-refresh'
 import InfiniteLoading from 'vue-infinite-loading'
 
 export default {
+  name: 'feedsView',
   components: {
     'vue-pull-refresh': VuePullRefresh,
     XImg,
@@ -58,6 +78,15 @@ export default {
   methods: {
     getBigImgUrl (content) {
       return Util.getBigImgUrl(content)
+    },
+    getVideoImgUrl (content) {
+      return Util.getVideoImgUrl(content)
+    },
+    getWebVideoUrl(content) {
+      return Util.getWebVideoUrl(content)
+    },
+    getVideoId(item) {
+      return JSON.parse(item.content).videoId
     },
     onPullDown() {
       console.log('onPullDown')
@@ -108,6 +137,7 @@ export default {
   margin-left: 10px;
 }
 .pic-container{
+  position: relative;
   height:180px;
   width:100%;
   margin: 5px 0;
@@ -117,6 +147,15 @@ export default {
   max-width: 100%;
   max-height: 100%;
   margin: 0 auto;
+}
+.video {
+  display: block;
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  top: 50%;
+  left: 50%; // margin-right: -50%;
+  transform: translate(-50%, -50%)
 }
 .footer{
   height: 2rem;
