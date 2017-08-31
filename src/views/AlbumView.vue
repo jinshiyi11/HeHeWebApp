@@ -1,15 +1,15 @@
 <template>
   <div class="albums">
-    <div v-if="loading">
-      <img :src="require('../assets/imgs/loading.gif')"></img>
+    <div class="center" v-if="loading">
+      正在加载...
     </div>
-    <div v-else-if="!loadSuccess">网络异常</div>
+    <div class="center" v-else-if="!loadSuccess">网络异常</div>
     <div v-else>
       <swiper class="swiper" :show-dots="false" height="100vh" v-model="currentIndex" @on-index-change="onIndexChanged">
         <img class="back" src="../assets/ic_menu_back.png" @click="$router.go(-1)"></img>
         <div class="title">{{currentIndex+1}}/{{imageList.length}}</div>
         <swiper-item v-for="(item, index) in imageList" :key="index" ref="swiperItems">
-          <x-img class="album-img" :src="getProxyUrl(item.bigUrl)" default-src="/static/img/default.png" container=".swiper"></x-img>
+          <x-img class="album-img" :src="item.bigUrl" default-src="/static/img/default.png" container=".swiper"></x-img>
         </swiper-item>
         <div class="desc">{{imageList[currentIndex].description}}</div>
       </swiper>
@@ -78,6 +78,8 @@ export default {
 
 <style lang="less" scoped>
 .albums{
+  height: 100vh;
+  background-color: #000;
   .back{
     width: 2rem;
     height: 2rem;
@@ -95,6 +97,13 @@ export default {
     background-color: rgba(0,0,0,0.5);
     color: #ffffff;
     font-size: 0.8rem;
+  }
+  .center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  color: #fff;
   }
   .swiper{
     background-color: #000000

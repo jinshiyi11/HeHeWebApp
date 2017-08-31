@@ -1,7 +1,7 @@
 // 是否使用代理
 const USE_PROXY = true
-// const HOST = 'http://hehedream.duapp.com'
-const HOST = 'http://localhost:8080'
+const HOST = 'http://hehedream.duapp.com'
+// const HOST = 'http://localhost:8080'
 
 export function getFeedListUrl(showTime = -1, pulldown = false) {
   let count = -30
